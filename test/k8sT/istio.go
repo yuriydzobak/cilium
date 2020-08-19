@@ -44,21 +44,22 @@ var _ = SkipContextIf(func() bool {
 		prerelease     = "-beta.1"
 		istioctlParams = "" +
 			" --set values.pilot.image=docker.io/jrajahalme/istio_pilot:1.6.8-4" +
-			" --set values.proxy.image=docker.io/jrajahalme/istio_proxy:1.6.8-2" +
-			" --set values.proxy_init.image=docker.io/jrajahalme/istio_proxy:1.6.8-2" +
-			" --set values.proxy.logLevel=debug" +
-			" --set values.logging.level=debug"
+			" --set values.global.proxy.image=docker.io/jrajahalme/istio_proxy:1.6.8-2" +
+			" --set values.global.proxy_init.image=docker.io/jrajahalme/istio_proxy:1.6.8-2" +
+			" --set values.global.proxy.logLevel=debug" +
+			" --set values.global.logging.level=debug"
 
 		// Keeping these here in comments serve multiple purposes:
 		// - remind how to test with prerelease images in future
 		// - cause CI infra to prepull these images so that they do not
 		//   need to be pulled on demand during the test
-		// " --set values.pilot.image=docker.io/cilium/istio_pilot:1.6.8" +
-		// " --set values.proxy.image=docker.io/cilium/istio_proxy:1.6.8" +
-		// " --set values.proxy_init.image=docker.io/cilium/istio_proxy:1.6.8" +
-		// " --set values.proxy.logLevel=trace"
+		// " --set values.pilot.image=docker..io/cilium/istio_pilot:1.6.8" +
+		// " --set values.global.proxy.image=docker..io/cilium/istio_proxy:1.6.8" +
+		// " --set values.global.proxy_init.image=docker..io/cilium/istio_proxy:1.6.8" +
+		// " --set values.global.proxy.logLevel=trace"
 		ciliumOptions = map[string]string{
 			"proxy.sidecarImageRegex": "jrajahalme/istio_proxy",
+			"kubeProxyReplacement": "disabled",
 			"debug.enabled": "true",
 			"debug.verbose": "flow",
 		}

@@ -35,7 +35,8 @@ data:
   cilium-endpoint-gc-interval: "5m0s"
 
   # If you want to run cilium in debug mode change this value to true
-  debug: "false"
+  debug: "true"
+  debug-verbose: "flow"
 
   # Enable IPv4 addressing. If enabled, all endpoints are allocated an IPv4
   # address.
@@ -92,7 +93,7 @@ data:
 
   # Regular expression matching compatible Istio sidecar istio-proxy
   # container image names
-  sidecar-istio-proxy-image: "cilium/istio_proxy"
+  sidecar-istio-proxy-image: "jrajahalme/istio_proxy"
 
   # Encapsulation mode for communication between nodes
   # Possible values:
