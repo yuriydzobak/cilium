@@ -44,6 +44,7 @@ import (
 
 var (
 	K8sSvcCache = k8s.NewServiceCache(nil)
+
 	// k8sSvcCacheSynced is used do signalize when all services are synced with
 	// k8s.
 	k8sSvcCacheSynced = make(chan struct{})
@@ -96,7 +97,7 @@ func k8sServiceHandler() {
 // will be synchronized. For clustermesh we only need to synchronize shared services, while for
 // VM support we need to sync all the services.
 func StartSynchronizingServices(shared bool) {
-	log.Info("Starting to synchronize k8s services to kvstore...")
+	log.Info("Starting to synchronize k8s services to kvstore")
 	sharedOnly = shared
 
 	serviceOptsModifier, err := utils.GetServiceListOptionsModifier()
@@ -137,7 +138,7 @@ func StartSynchronizingServices(shared bool) {
 			AddFunc: func(obj interface{}) {
 				metrics.EventTSK8s.SetToCurrentTime()
 				if k8sSvc := k8s.ObjToV1Services(obj); k8sSvc != nil {
-					log.Debugf("Received service addition %+v", k8sSvc)
+					log.WithField(logfields.ServiceName, k8sSvc.Name).Debugf("Received service addition %+v", k8sSvc)
 					K8sSvcCache.UpdateService(k8sSvc, swgSvcs)
 				}
 			},
@@ -149,7 +150,7 @@ func StartSynchronizingServices(shared bool) {
 							return
 						}
 
-						log.Debugf("Received service update %+v", newk8sSvc)
+						log.WithField(logfields.ServiceName, newk8sSvc.Name).Debugf("Received service update %+v", newk8sSvc)
 						K8sSvcCache.UpdateService(newk8sSvc, swgSvcs)
 					}
 				}
@@ -160,7 +161,7 @@ func StartSynchronizingServices(shared bool) {
 				if k8sSvc == nil {
 					return
 				}
-				log.Debugf("Received service deletion %+v", k8sSvc)
+				log.WithField(logfields.ServiceName, k8sSvc.Name).Debugf("Received service deletion %+v", k8sSvc)
 				K8sSvcCache.DeleteService(k8sSvc, swgSvcs)
 			},
 		},
